@@ -838,8 +838,33 @@ jit_function_abandon(func)
 int
 jit_function_apply(func, args, return_area)
 	jit_function_t	func
-	void **	args
-	void *	return_area
+	AV*	args
+	SV*	return_area
+PREINIT:
+	jit_type_t rettype;
+	jit_type_t signature;
+	size_t retsize;
+	char *buffer;
+	AVSTR_PREINIT(args);
+CODE:
+	signature = jit_function_get_signature(func);
+	rettype = jit_type_get_return(signature);
+	Perl_assert(rettype != NULL);
+
+	retsize = jit_type_get_size(rettype);
+
+	sv_setpvn(return_area, "", 0);
+	buffer = SvGROW(return_area, retsize + 1);
+
+	AVSTR_CODE(args, "jit_function_apply");
+
+	RETVAL = jit_function_apply(func, (void*) ptr_args, buffer);
+	buffer[retsize] = 0;
+	SvCUR_set(return_area, retsize);
+	SvPOK_only(return_area);
+	SvSETMAGIC(return_area);
+OUTPUT:
+	RETVAL
 
 int
 jit_function_apply_vararg(func, signature, args, return_area)
