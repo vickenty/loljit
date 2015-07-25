@@ -1,5 +1,5 @@
 char * format					T_PTROBJ
-jit_abi_t					T_PTROBJ
+jit_abi_t					T_ENUM
 jit_block_t					T_PTROBJ
 jit_closure_func				T_PTROBJ
 jit_closure_va_list_t				T_PTROBJ
