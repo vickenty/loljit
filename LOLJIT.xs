@@ -5,7 +5,7 @@
 
 #include "ppport.h"
 
-#include <jit-perlready.h>
+#include <jit/jit.h>
 
 #include "const-c.inc"
 
