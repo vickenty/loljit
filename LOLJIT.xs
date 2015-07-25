@@ -1100,26 +1100,34 @@ jit_insn_atan2(func, value1, value2)
 int
 jit_insn_branch(func, label)
 	jit_function_t	func
-	jit_label_t *	label
+	jit_label_t &	label
+OUTPUT:
+	label
 
 int
 jit_insn_branch_if(func, value, label)
 	jit_function_t	func
 	jit_value_t	value
-	jit_label_t *	label
+	jit_label_t &	label
+OUTPUT:
+	label
 
 int
 jit_insn_branch_if_not(func, value, label)
 	jit_function_t	func
 	jit_value_t	value
-	jit_label_t *	label
+	jit_label_t &	label
+OUTPUT:
+	label
 
 int
 jit_insn_branch_if_pc_not_in_range(func, start_label, end_label, label)
 	jit_function_t	func
 	jit_label_t	start_label
 	jit_label_t	end_label
-	jit_label_t *	label
+	jit_label_t &	label
+OUTPUT:
+	label
 
 jit_value_t
 jit_insn_call(func, name, jit_func, signature, args, flags)
@@ -1413,7 +1421,9 @@ jit_insn_jump_table(func, value, labels, num_labels)
 int
 jit_insn_label(func, label)
 	jit_function_t	func
-	jit_label_t *	label
+	jit_label_t &	label
+OUTPUT:
+	label
 
 jit_value_t
 jit_insn_le(func, value1, value2)
@@ -3685,3 +3695,4 @@ jitom_type_tag_as_value(type, model, klass, incref)
 	int	incref
 
 INCLUDE: jit_type-xs.inc
+INCLUDE: jit_misc-xs.inc

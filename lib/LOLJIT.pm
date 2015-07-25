@@ -51,6 +51,10 @@ our @TYPES = qw(
     jit_type_sys_long_double
 );
 
+my @MISC = qw(
+    jit_label_undefined
+);
+
 our %EXPORT_TAGS = ( 'all' => [ qw(
 	JIT_PROT_EXEC_READ
 	JIT_PROT_EXEC_READ_WRITE
@@ -792,7 +796,7 @@ our %EXPORT_TAGS = ( 'all' => [ qw(
 	jitom_type_is_value
 	jitom_type_tag_as_class
 	jitom_type_tag_as_value
-), @TYPES ] );
+), @TYPES, @MISC ] );
 
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 
