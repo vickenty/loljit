@@ -1,0 +1,6 @@
+Revision history for Perl extension LOLJIT.
+
+0.01  Sat Jul 25 14:43:32 2015
+	- original version; created by h2xs 1.23 with options
+		-O -x -n LOLJIT jit-perlready.h
+

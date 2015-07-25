@@ -1,0 +1,11 @@
+Changes
+LOLJIT.xs
+Makefile.PL
+MANIFEST
+ppport.h
+README
+typemap
+t/LOLJIT.t
+fallback/const-c.inc
+fallback/const-xs.inc
+lib/LOLJIT.pm
