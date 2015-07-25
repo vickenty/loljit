@@ -8,6 +8,7 @@
 #include <jit/jit.h>
 
 #include "const-c.inc"
+#include "jit_type-c.inc"
 
 MODULE = LOLJIT		PACKAGE = LOLJIT		
 
@@ -3591,3 +3592,5 @@ jitom_type_tag_as_value(type, model, klass, incref)
 	jit_objmodel_t	model
 	jitom_class_t	klass
 	int	incref
+
+INCLUDE: jit_type-xs.inc

@@ -17,6 +17,40 @@ our @ISA = qw(Exporter);
 # This allows declaration	use LOLJIT ':all';
 # If you do not need this, moving things directly into @EXPORT or @EXPORT_OK
 # will save memory.
+
+our @TYPES = qw(
+    jit_type_void
+    jit_type_sbyte
+    jit_type_ubyte
+    jit_type_short
+    jit_type_ushort
+    jit_type_int
+    jit_type_uint
+    jit_type_nint
+    jit_type_nuint
+    jit_type_long
+    jit_type_ulong
+    jit_type_float32
+    jit_type_float64
+    jit_type_nfloat
+    jit_type_void_ptr
+    jit_type_sys_bool
+    jit_type_sys_char
+    jit_type_sys_schar
+    jit_type_sys_uchar
+    jit_type_sys_short
+    jit_type_sys_ushort
+    jit_type_sys_int
+    jit_type_sys_uint
+    jit_type_sys_long
+    jit_type_sys_ulong
+    jit_type_sys_longlong
+    jit_type_sys_ulonglong
+    jit_type_sys_float
+    jit_type_sys_double
+    jit_type_sys_long_double
+);
+
 our %EXPORT_TAGS = ( 'all' => [ qw(
 	JIT_PROT_EXEC_READ
 	JIT_PROT_EXEC_READ_WRITE
@@ -758,7 +792,7 @@ our %EXPORT_TAGS = ( 'all' => [ qw(
 	jitom_type_is_value
 	jitom_type_tag_as_class
 	jitom_type_tag_as_value
-) ] );
+), @TYPES ] );
 
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 
