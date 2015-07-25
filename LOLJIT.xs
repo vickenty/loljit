@@ -2504,6 +2504,10 @@ jit_realloc(ptr, size)
 	void *	ptr
 	unsigned int	size
 
+=for Disable
+
+h2xs failed to parse these functions properly, Perl has own sprintf.
+
 int
 jit_snprintf(str, len, arg2, ...)
 	char *	str
@@ -2514,6 +2518,8 @@ int
 jit_sprintf(str, arg1, ...)
 	char *	str
 	char * format	arg1
+
+=cut
 
 void
 jit_stack_trace_free(trace)
