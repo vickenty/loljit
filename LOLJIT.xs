@@ -9,6 +9,7 @@
 
 #include "const-c.inc"
 #include "jit_type-c.inc"
+#include "av_to_pp.h"
 
 MODULE = LOLJIT		PACKAGE = LOLJIT		
 
@@ -1096,14 +1097,22 @@ jit_insn_branch_if_pc_not_in_range(func, start_label, end_label, label)
 	jit_label_t *	label
 
 jit_value_t
-jit_insn_call(func, name, jit_func, signature, args, num_args, flags)
+jit_insn_call(func, name, jit_func, signature, args, flags)
 	jit_function_t	func
 	char *	name
 	jit_function_t	jit_func
 	jit_type_t	signature
-	jit_value_t *	args
-	unsigned int	num_args
+	AV*	args
 	int	flags
+PREINIT:
+	AVPP_PREINIT(args, jit_value_t);
+CODE:
+	AVPP_CODE(args, "jit_insn_call", jit_value_t);
+	RETVAL = jit_insn_call(func, name, jit_func, signature, ptr_args, num_args, flags);
+OUTPUT:
+	RETVAL
+CLEANUP:
+	AVPP_CLEANUP(args);
 
 jit_value_t
 jit_insn_call_filter(func, label, value, type)
@@ -1118,22 +1127,38 @@ jit_insn_call_finally(func, finally_label)
 	jit_label_t *	finally_label
 
 jit_value_t
-jit_insn_call_indirect(func, value, signature, args, num_args, flags)
+jit_insn_call_indirect(func, value, signature, args, flags)
 	jit_function_t	func
 	jit_value_t	value
 	jit_type_t	signature
-	jit_value_t *	args
-	unsigned int	num_args
+	AV*	args
 	int	flags
+PREINIT:
+	AVPP_PREINIT(args, jit_value_t);
+CODE:
+	AVPP_CODE(args, "jit_insn_call_indirect", jit_value_t);
+	RETVAL = jit_insn_call_indirect(func, value, signature, ptr_args, num_args, flags);
+OUTPUT:
+	RETVAL
+CLEANUP:
+	AVPP_CLEANUP(args);
 
 jit_value_t
-jit_insn_call_indirect_vtable(func, value, signature, args, num_args, flags)
+jit_insn_call_indirect_vtable(func, value, signature, args, flags)
 	jit_function_t	func
 	jit_value_t	value
 	jit_type_t	signature
-	jit_value_t *	args
-	unsigned int	num_args
+	AV*	args
 	int	flags
+PREINIT:
+	AVPP_PREINIT(args, jit_value_t);
+CODE:
+	AVPP_CODE(args, "jit_insn_call_indirect_vtable", jit_value_t);
+	RETVAL = jit_insn_call_indirect_vtable(func, value, signature, ptr_args, num_args, flags);
+OUTPUT:
+	RETVAL
+CLEANUP:
+	AVPP_CLEANUP(args);
 
 jit_value_t
 jit_insn_call_intrinsic(func, name, intrinsic_func, descriptor, arg1, arg2)
@@ -1145,14 +1170,22 @@ jit_insn_call_intrinsic(func, name, intrinsic_func, descriptor, arg1, arg2)
 	jit_value_t	arg2
 
 jit_value_t
-jit_insn_call_native(func, name, native_func, signature, args, num_args, flags)
+jit_insn_call_native(func, name, native_func, signature, args, flags)
 	jit_function_t	func
 	char *	name
 	void *	native_func
 	jit_type_t	signature
-	jit_value_t *	args
-	unsigned int	num_args
+	AV*	args
 	int	flags
+PREINIT:
+	AVPP_PREINIT(args, jit_value_t);
+CODE:
+	AVPP_CODE(args, "jit_insn_call_native", jit_value_t);
+	RETVAL = jit_insn_call_native(func, name, native_func, signature, ptr_args, num_args, flags);
+OUTPUT:
+	RETVAL
+CLEANUP:
+	AVPP_CLEANUP(args);
 
 jit_value_t
 jit_insn_ceil(func, value1)
@@ -2630,18 +2663,34 @@ jit_type_create_pointer(type, incref)
 	int	incref
 
 jit_type_t
-jit_type_create_signature(abi, return_type, params, num_params, incref)
+jit_type_create_signature(abi, return_type, params, incref)
 	jit_abi_t	abi
 	jit_type_t	return_type
-	jit_type_t *	params
-	unsigned int	num_params
+	AV*	params
 	int	incref
+PREINIT:
+	AVPP_PREINIT(params, jit_type_t);
+CODE:
+	AVPP_CODE(params, "jit_type_create_signature", jit_type_t);
+	RETVAL = jit_type_create_signature(abi, return_type, ptr_params, num_params, incref);
+OUTPUT:
+	RETVAL
+CLEANUP:
+	AVPP_CLEANUP(params);
 
 jit_type_t
-jit_type_create_struct(fields, num_fields, incref)
-	jit_type_t *	fields
-	unsigned int	num_fields
+jit_type_create_struct(fields, incref)
+	AV*	fields
 	int	incref
+PREINIT:
+	AVPP_PREINIT(fields, jit_type_t);
+CODE:
+	AVPP_CODE(fields, "jit_type_create_struct", jit_type_t);
+	RETVAL = jit_type_create_struct(ptr_fields, num_fields, incref);
+OUTPUT:
+	RETVAL
+CLEANUP:
+	AVPP_CLEANUP(fields);
 
 jit_type_t
 jit_type_create_tagged(type, kind, data, free_func, incref)
@@ -2652,10 +2701,19 @@ jit_type_create_tagged(type, kind, data, free_func, incref)
 	int	incref
 
 jit_type_t
-jit_type_create_union(fields, num_fields, incref)
-	jit_type_t *	fields
-	unsigned int	num_fields
+jit_type_create_union(fields, incref)
+	AV*	fields
 	int	incref
+PREINIT:
+	AVPP_PREINIT(fields, jit_type_t);
+CODE:
+	AVPP_CODE(fields, "jit_type_create_union", jit_type_t);
+	RETVAL = jit_type_create_union(ptr_fields, num_fields, incref);
+OUTPUT:
+	RETVAL
+CLEANUP:
+	AVPP_CLEANUP(fields);
+
 
 unsigned int
 jit_type_find_name(type, name)
@@ -2776,10 +2834,18 @@ jit_type_return_via_pointer(type)
 	jit_type_t	type
 
 int
-jit_type_set_names(type, names, num_names)
+jit_type_set_names(type, names)
 	jit_type_t	type
-	char **	names
-	unsigned int	num_names
+	AV*	names
+PREINIT:
+	AVSTR_PREINIT(names);
+CODE:
+	AVSTR_CODE(names, "jit_type_set_names");
+	RETVAL = jit_type_set_names(type, ptr_names, num_names);
+OUTPUT:
+	RETVAL
+CLEANUP:
+	AVSTR_CLEANUP(names);
 
 void
 jit_type_set_offset(type, field_index, offset)
