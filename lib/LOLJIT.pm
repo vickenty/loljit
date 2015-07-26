@@ -53,6 +53,7 @@ our @TYPES = qw(
 
 my @MISC = qw(
     jit_label_undefined
+    loljit_function_apply
 );
 
 our %EXPORT_TAGS = ( 'all' => [ qw(

@@ -62,6 +62,10 @@ sub gcd_jit {
     return unpack "q", $r;
 }
 
+sub gcd_lol {
+    loljit_function_apply $fun, @_;
+}
+
 sub gcd_perl {
     my ($u, $v) = @_;
     my $t;
@@ -77,11 +81,13 @@ sub gcd_perl {
 my $u = int rand(1_000_000_000) + 1_000_000_000;
 my $v = int rand(1_000_000_000) + 1_000_000_000;
 
+print "gcd_lol($u, $v) = ", gcd_lol($u, $v), "\n";
 print "gcd_jit($u, $v) = ", gcd_jit($u, $v), "\n";
 print "gcd_perl($u, $v) = ", gcd_perl($u, $v), "\n";
 
 timethese(1000000, {
     perl => sub { gcd_perl($u, $v) },
     jit => sub { gcd_jit($u, $v) },
+    lol => sub { gcd_lol($u, $v) },
 });
 
