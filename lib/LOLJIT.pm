@@ -56,6 +56,18 @@ my @MISC = qw(
     loljit_function_apply
 );
 
+our @SHIMS = qw(
+    lolxsub_stack_state_init_ptr
+    lolxsub_stack_fetch_ptr
+    lolxsub_stack_store_ptr
+    lolxsub_stack_prepare_return_ptr
+    lolxsub_stack_xpush_sv_ptr
+    lolxsub_stack_xpush_nint_ptr
+    lolxsub_stack_xpush_nuint_ptr
+    lolxsub_stack_xpush_double_ptr
+    lolxsub_stack_putback_ptr
+);
+
 our %EXPORT_TAGS = ( 'all' => [ qw(
 	JIT_PROT_EXEC_READ
 	JIT_PROT_EXEC_READ_WRITE
@@ -797,7 +809,7 @@ our %EXPORT_TAGS = ( 'all' => [ qw(
 	jitom_type_is_value
 	jitom_type_tag_as_class
 	jitom_type_tag_as_value
-), @TYPES, @MISC ] );
+), @TYPES, @MISC, @SHIMS ] );
 
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 

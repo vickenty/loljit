@@ -9,6 +9,7 @@
 
 #include "const-c.inc"
 #include "jit_type-c.inc"
+#include "jit_xsub-c.inc"
 #include "av_to_pp.h"
 
 MODULE = LOLJIT		PACKAGE = LOLJIT		
@@ -3696,3 +3697,4 @@ jitom_type_tag_as_value(type, model, klass, incref)
 
 INCLUDE: jit_type-xs.inc
 INCLUDE: jit_misc-xs.inc
+INCLUDE: jit_xsub-xs.inc
