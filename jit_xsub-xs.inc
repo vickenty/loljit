@@ -61,3 +61,17 @@ CODE:
 OUTPUT:
 	RETVAL
 
+void*
+lolxsub_sv_iv_ptr()
+CODE:
+	RETVAL = lolxsub_sv_iv;
+OUTPUT:
+	RETVAL
+
+void*
+lolxsub_sv_uv_ptr()
+CODE:
+	RETVAL = lolxsub_sv_uv;
+OUTPUT:
+	RETVAL
+

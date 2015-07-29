@@ -5,18 +5,20 @@ use warnings;
 use autodie;
 use File::Slurp;
 
-my $prefix = "lolxsub_stack_";
+my $prefix = "lolxsub_";
 
 my @shims = map "$prefix$_", qw/
-    state_init
-    fetch
-    store
-    prepare_return
-    xpush_sv
-    xpush_nint
-    xpush_nuint
-    xpush_double
-    putback
+    stack_state_init
+    stack_fetch
+    stack_store
+    stack_prepare_return
+    stack_xpush_sv
+    stack_xpush_nint
+    stack_xpush_nuint
+    stack_xpush_double
+    stack_putback
+    sv_iv
+    sv_uv
 /;
 
 open my $xs, ">", "jit_xsub-xs.inc";

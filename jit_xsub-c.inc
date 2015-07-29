@@ -54,6 +54,16 @@ void lolxsub_stack_putback(pTHX_ lolxsub_stack_state_t stack)
   PUTBACK;
 }
 
+int lolxsub_sv_iv(pTHX_ SV *sv)
+{
+  return SvIV(sv);
+}
+
+int lolxsub_sv_uv(pTHX_ SV *sv)
+{
+  return SvUV(sv);
+}
+
 #undef sp
 #undef mark
 #undef ax
