@@ -78,8 +78,8 @@ sub gcd_perl {
     return $u < 0 ? -$u : $u;
 }
 
-my $u = int rand(1_000_000_000) + 1_000_000_000;
-my $v = int rand(1_000_000_000) + 1_000_000_000;
+my $u = shift // int rand(1_000_000_000) + 1_000_000_000;
+my $v = shift // int rand(1_000_000_000) + 1_000_000_000;
 
 print "gcd_lol($u, $v) = ", gcd_lol($u, $v), "\n";
 print "gcd_jit($u, $v) = ", gcd_jit($u, $v), "\n";
