@@ -2,20 +2,18 @@ use strict;
 use warnings;
 
 use lib "blib/arch", "blib/lib";
+
 use LOLJIT ":all";
+use LOLJIT::XSUB ":all";
 use Benchmark qw/timethese/;
+use DynaLoader;
 
 my $ctx = jit_context_create;
 
 # converted from code at http://eli.thegreenplace.net/2013/10/17/getting-started-with-libjit-part-1/ 
-sub make_gcd {
-    jit_context_build_start $ctx;
 
-    my $params = [ jit_type_int, jit_type_int ];
-    my $sig = jit_type_create_signature jit_abi_cdecl, jit_type_nint, $params, 1;
-    my $fun = jit_function_create $ctx, $sig;
-
-    my ($u, $v) = map jit_value_get_param($fun, $_), 0 .. 1;
+sub build_gcd {
+    my ($fun, $u, $v) = @_;
     my $t = jit_value_create $fun, jit_type_int;
     my $z = jit_value_create_nint_constant $fun, jit_type_int, 0;
 
@@ -43,16 +41,54 @@ sub make_gcd {
     jit_insn_return $fun, $nu;
 
     jit_insn_label $fun, $l_pos;
-    jit_insn_return $fun, $u;
 
+    return $u;
+}
+
+sub make_gcd {
+    my $params = [ jit_type_int, jit_type_int ];
+    my $sig = jit_type_create_signature jit_abi_cdecl, jit_type_nint, $params, 1;
+    my $fun = jit_function_create $ctx, $sig;
+
+    my ($u, $v) = map jit_value_get_param($fun, $_), 0 .. 1;
+
+    my $ret = build_gcd($fun, $u, $v);
+
+    jit_insn_return $fun, $ret;
     jit_function_compile $fun;
-
-    jit_context_build_end $ctx;
-
     return $fun;
 }
 
+sub make_gcd_xsub {
+    my ($fun, $stack) = lolxsub_create $ctx;
+    my ($perl) = lolxsub_params $fun, $stack, [];
+
+    my $uidx = jit_value_create_nint_constant $fun, jit_type_nint, 0;
+    my $usv = lolxsub_stack_fetch($fun, $perl, $stack, $uidx);
+    my $u = lolxsub_sv_iv($fun, $perl, $usv);
+
+    my $vidx = jit_value_create_nint_constant $fun, jit_type_nint, 1;
+    my $vsv = lolxsub_stack_fetch($fun, $perl, $stack, $vidx);
+    my $v = lolxsub_sv_iv($fun, $perl, $vsv);
+
+    my $ret = build_gcd($fun, $u, $v);
+
+    lolxsub_stack_prepare_return $fun, $perl, $stack;
+    lolxsub_stack_xpush_nint $fun, $perl, $stack, $ret;
+    lolxsub_stack_putback($fun, $perl, $stack);
+
+    jit_function_compile $fun;
+    return $fun;
+}
+
+jit_context_build_start $ctx;
+
 my $fun = make_gcd($ctx);
+my $xsub = make_gcd_xsub($ctx);
+my $ptr = jit_function_to_closure $xsub;
+DynaLoader::dl_install_xsub("main::gcd_xsub", $ptr);
+
+jit_context_build_end $ctx;
 
 sub gcd_jit {
     my $u = pack "q", shift;
@@ -84,10 +120,12 @@ my $v = shift // int rand(1_000_000_000) + 1_000_000_000;
 print "gcd_lol($u, $v) = ", gcd_lol($u, $v), "\n";
 print "gcd_jit($u, $v) = ", gcd_jit($u, $v), "\n";
 print "gcd_perl($u, $v) = ", gcd_perl($u, $v), "\n";
+print "gcd_xsub($u, $v) = ", gcd_xsub($u, $v), "\n";
 
-timethese(1000000, {
+timethese(2000000, {
     perl => sub { gcd_perl($u, $v) },
     jit => sub { gcd_jit($u, $v) },
     lol => sub { gcd_lol($u, $v) },
+    lxs => sub { gcd_xsub($u, $v) },
 });
 
