@@ -811,6 +811,10 @@ our %EXPORT_TAGS = ( 'all' => [ qw(
 	jitom_type_is_value
 	jitom_type_tag_as_class
 	jitom_type_tag_as_value
+        jit_dump_type
+        jit_dump_value
+        jit_dump_insn
+        jit_dump_function
 ), @TYPES, @MISC, @SHIMS ] );
 
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );

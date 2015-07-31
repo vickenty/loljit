@@ -3695,6 +3695,30 @@ jitom_type_tag_as_value(type, model, klass, incref)
 	jitom_class_t	klass
 	int	incref
 
+void
+jit_dump_type(stream, type)
+	FILE*	stream
+	jit_type_t	type
+
+void
+jit_dump_value(stream, func, value, prefix)
+	FILE*	stream
+	jit_function_t	func
+	jit_value_t	value
+	char*	prefix
+
+void
+jit_dump_insn(stream, func, insn)
+	FILE*	stream
+	jit_function_t	func
+	jit_insn_t	insn
+
+void
+jit_dump_function(stream, func, name)
+	FILE*	stream
+	jit_function_t	func
+	char*	name
+
 INCLUDE: jit_type-xs.inc
 INCLUDE: jit_misc-xs.inc
 INCLUDE: jit_xsub-xs.inc
