@@ -38,7 +38,8 @@ sub build_gcd {
     jit_insn_branch_if $fun, $uz, $l_pos;
 
     my $nu = jit_insn_neg $fun, $u;
-    jit_insn_return $fun, $nu;
+    #jit_insn_return $fun, $nu;
+    jit_insn_store $fun, $u, $nu;
 
     jit_insn_label $fun, $l_pos;
 
