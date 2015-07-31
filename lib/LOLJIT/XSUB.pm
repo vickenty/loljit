@@ -38,7 +38,6 @@ sub shim {
 
     my $sig = jit_type_create_signature jit_abi_cdecl, $rtype, [
         jit_type_void_ptr,      # my_perl
-        jit_type_void_ptr,      # stack
         @params
     ], 1;
 
@@ -55,12 +54,12 @@ sub shim {
     };
 }
 
-shim jit_type_void, stack_state_init => ();
-shim jit_type_void, stack_xpush_nint => jit_type_nint;
-shim jit_type_void, stack_prepare_return => ();
-shim jit_type_void, stack_putback => ();
-shim jit_type_void_ptr, stack_fetch => (jit_type_nint);
-shim jit_type_nint, sv_iv => (jit_type_void_ptr);
+shim jit_type_void, stack_state_init => jit_type_void_ptr;
+shim jit_type_void, stack_xpush_nint => jit_type_void_ptr, jit_type_nint;
+shim jit_type_void, stack_prepare_return => jit_type_void_ptr;
+shim jit_type_void, stack_putback => jit_type_void_ptr;
+shim jit_type_void_ptr, stack_fetch => jit_type_void_ptr, jit_type_nint;
+shim jit_type_nint, sv_iv => jit_type_void_ptr;
 
 sub lolxsub_create {
     my $ctx = shift;
