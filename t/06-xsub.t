@@ -18,16 +18,7 @@ sub make_simple {
     jit_context_build_start $ctx;
 
     my ($fun, $stack) = lolxsub_create $ctx;
-    my ($perl) = lolxsub_params $fun, $stack, [];
-
-    # this goes into fixme above
-    my $iidx = jit_value_create_nint_constant $fun, jit_type_nint, 0;
-    my $isv = lolxsub_stack_fetch($fun, $perl, $stack, $iidx);
-    my $i = lolxsub_sv_iv($fun, $perl, $isv);
-
-    my $jidx = jit_value_create_nint_constant $fun, jit_type_nint, 1;
-    my $jsv = lolxsub_stack_fetch($fun, $perl, $stack, $jidx);
-    my $j = lolxsub_sv_iv($fun, $perl, $jsv);
+    my ($perl, $i, $j) = lolxsub_params $fun, $stack, qw/iv iv/;
 
     my $k = jit_insn_mul $fun, $i, $j;
 

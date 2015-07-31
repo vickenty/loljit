@@ -61,15 +61,7 @@ sub make_gcd {
 
 sub make_gcd_xsub {
     my ($fun, $stack) = lolxsub_create $ctx;
-    my ($perl) = lolxsub_params $fun, $stack, [];
-
-    my $uidx = jit_value_create_nint_constant $fun, jit_type_nint, 0;
-    my $usv = lolxsub_stack_fetch($fun, $perl, $stack, $uidx);
-    my $u = lolxsub_sv_iv($fun, $perl, $usv);
-
-    my $vidx = jit_value_create_nint_constant $fun, jit_type_nint, 1;
-    my $vsv = lolxsub_stack_fetch($fun, $perl, $stack, $vidx);
-    my $v = lolxsub_sv_iv($fun, $perl, $vsv);
+    my ($perl, $u, $v) = lolxsub_params $fun, $stack, qw/iv iv/;
 
     my $ret = build_gcd($fun, $u, $v);
 

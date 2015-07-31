@@ -70,15 +70,33 @@ sub lolxsub_create {
     return $fun, $perl_stack_ptr;
 }
 
+sub lolxsub_sv_sv {
+    my ($fun, $perl, $sv) = @_;
+    return $sv;
+}
+
+my %typemap = (
+    iv => \&lolxsub_sv_iv,
+    sv => \&lolxsub_sv_sv,
+);
+
 sub lolxsub_params {
-    my ($fun, $stack, $params) = @_;
+    my ($fun, $stack, @params) = @_;
 
     my $perl = jit_value_get_param($fun, 0);
     lolxsub_stack_state_init($fun, $perl, $stack);
 
-    # fixme
+    my @args;
+    foreach my $idx (0 .. $#params) {
+        my $jit_idx = jit_value_create_nint_constant $fun, jit_type_nint, $idx;
+        my $sv = lolxsub_stack_fetch($fun, $perl, $stack, $jit_idx);
 
-    return ($perl);
+        my $type = $params[$idx];
+        my $conv = $typemap{$type} // die "invalid type name $type";
+        push @args, $conv->($fun, $perl, $sv);
+    }
+
+    return ($perl, @args);
 }
 
 1;
