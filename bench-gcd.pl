@@ -14,8 +14,8 @@ my $ctx = jit_context_create;
 
 sub build_gcd {
     my ($fun, $u, $v) = @_;
-    my $t = jit_value_create $fun, jit_type_int;
-    my $z = jit_value_create_nint_constant $fun, jit_type_int, 0;
+    my $t = jit_value_create $fun, jit_type_nint;
+    my $z = jit_value_create_nint_constant $fun, jit_type_nint, 0;
 
     my $l_while = jit_label_undefined;
     my $l_end = jit_label_undefined;
