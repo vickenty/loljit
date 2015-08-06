@@ -63,7 +63,7 @@ shim jit_type_nint, sv_iv => jit_type_void_ptr;
 
 sub lolxsub_create {
     my $ctx = shift;
-    my $sig = jit_type_create_signature jit_abi_cdecl, jit_type_void, [ jit_type_void_ptr ], 1;
+    my $sig = jit_type_create_signature jit_abi_cdecl, jit_type_void, [ jit_type_void_ptr, jit_type_void_ptr ], 1;
     my $fun = jit_function_create $ctx, $sig;
     my $perl_stack_val = jit_value_create $fun, $perl_stack_t;
     my $perl_stack_ptr = jit_insn_address_of $fun, $perl_stack_val;
