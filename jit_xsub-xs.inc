@@ -75,3 +75,10 @@ CODE:
 OUTPUT:
 	RETVAL
 
+void*
+lolxsub_call_sv_ptr()
+CODE:
+	RETVAL = lolxsub_call_sv;
+OUTPUT:
+	RETVAL
+

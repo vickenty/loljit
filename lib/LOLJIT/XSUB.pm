@@ -17,6 +17,7 @@ our @EXPORT_OK = qw/
     lolxsub_stack_putback
     lolxsub_stack_fetch
     lolxsub_sv_iv
+    lolxsub_call_sv
     lolxsub_create
     lolxsub_params
 /;
@@ -66,6 +67,7 @@ shim jit_type_void, stack_prepare_return => jit_type_void_ptr;
 shim jit_type_void, stack_putback => jit_type_void_ptr;
 shim jit_type_void_ptr, stack_fetch => jit_type_void_ptr, jit_type_nint;
 shim jit_type_nint, sv_iv => jit_type_void_ptr;
+shim jit_type_void, call_sv => jit_type_void_ptr, jit_type_nint;
 
 sub lolxsub_create {
     my $ctx = shift;

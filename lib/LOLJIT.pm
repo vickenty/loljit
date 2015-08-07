@@ -68,6 +68,7 @@ our @SHIMS = qw(
     lolxsub_stack_putback_ptr
     lolxsub_sv_iv_ptr
     lolxsub_sv_uv_ptr
+    lolxsub_call_sv_ptr
 );
 
 our %EXPORT_TAGS = ( 'all' => [ qw(

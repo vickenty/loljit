@@ -19,6 +19,7 @@ my @shims = map "$prefix$_", qw/
     stack_putback
     sv_iv
     sv_uv
+    call_sv
 /;
 
 open my $xs, ">", "jit_xsub-xs.inc";

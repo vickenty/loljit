@@ -64,6 +64,14 @@ int lolxsub_sv_uv(pTHX_ SV *sv)
   return SvUV(sv);
 }
 
+void lolxsub_call_sv(pTHX_ SV* sv, I32 flags) {
+  if (flags == -1) {
+    flags = GIMME_V;
+  }
+
+  call_sv(sv, flags);
+}
+
 #undef sp
 #undef mark
 #undef ax
