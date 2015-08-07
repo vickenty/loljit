@@ -9,7 +9,10 @@ use Exporter;
 our @ISA = qw/Exporter/;
 our @EXPORT_OK = qw/
     lolxsub_stack_state_init
+    lolxsub_stack_xpush_sv
     lolxsub_stack_xpush_nint
+    lolxsub_stack_xpush_nuint
+    lolxsub_stack_xpush_double
     lolxsub_stack_prepare_return
     lolxsub_stack_putback
     lolxsub_stack_fetch
@@ -55,7 +58,10 @@ sub shim {
 }
 
 shim jit_type_void, stack_state_init => jit_type_void_ptr;
+shim jit_type_void, stack_xpush_sv => jit_type_void_ptr, jit_type_void_ptr;
 shim jit_type_void, stack_xpush_nint => jit_type_void_ptr, jit_type_nint;
+shim jit_type_void, stack_xpush_nuint => jit_type_void_ptr, jit_type_nuint;
+shim jit_type_void, stack_xpush_double => jit_type_void_ptr, jit_type_double;
 shim jit_type_void, stack_prepare_return => jit_type_void_ptr;
 shim jit_type_void, stack_putback => jit_type_void_ptr;
 shim jit_type_void_ptr, stack_fetch => jit_type_void_ptr, jit_type_nint;

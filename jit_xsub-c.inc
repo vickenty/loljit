@@ -47,7 +47,7 @@ void lolxsub_stack_prepare_return(pTHX_ lolxsub_stack_state_t stack)
 XWRAP(mXPUSHs, sv, SV*);
 XWRAP(mXPUSHi, nint, int);
 XWRAP(mXPUSHu, nuint, unsigned int);
-XWRAP(mXPUSHu, double, double);
+XWRAP(mXPUSHn, double, double);
 
 void lolxsub_stack_putback(pTHX_ lolxsub_stack_state_t stack)
 {
