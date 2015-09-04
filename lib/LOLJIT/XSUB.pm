@@ -46,10 +46,10 @@ sub shim {
     ], 1;
 
     my $insn = sub {
-        my ($fun, $my_perl, $stack, @args) = @_;
+        my ($fun, @args) = @_;
         local $" = " ";
         #cluck "$name(@_)";
-        return jit_insn_call_native $fun, $name, $ptr, $sig, [ $my_perl, $stack, @args ], 0;
+        return jit_insn_call_native $fun, $name, $ptr, $sig, [ @args ], 0;
     };
 
     do {
