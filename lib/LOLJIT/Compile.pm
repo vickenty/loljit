@@ -87,11 +87,18 @@ $ops{padsv} = sub {
     }
 };
 
+my %const_typemap = (
+    "B::IV" => sub { jit_value_create_nint_constant shift, jit_type_nint, shift; },
+    "B::NV" => sub { jit_value_create_float64_constant shift, jit_type_float64, shift; },
+);
+
 $ops{const} = sub {
     my ($ctx, $op) = @_;
-    
-    # FIXME: don't assume integer type here.
-    return jit_value_create_nint_constant $ctx->{fun}, jit_type_nint, ${$op->{pad}{value}};
+
+    my $val = $op->{pad}{value};
+    my $class = ref B::svref_2object($val);
+    my $impl = $const_typemap{$class} // confess "unsupported constant class $class";
+    $impl->($ctx->{fun}, $$val);
 };
 
 $ops{cond_expr} = sub {
