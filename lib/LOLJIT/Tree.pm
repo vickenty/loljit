@@ -36,12 +36,36 @@ sub expr {
     local @$scope{keys %args} = values %args;
 
     my $name = $op->name;
-    my $impl = $ops{$name} // die "unsupported op $name";
+    my $type = ref $op;
+    my $impl = $ops{$name} // $ops{$type} // die "unsupported op $name of type $type";
 
     return $impl->($scope, $op);
 }
 
-$ops{lineseq} = sub {
+$ops{"B::COP"} = sub {
+    my ($scope, $op) = @_;
+    return {
+        op => $op->name,
+    };
+};
+
+$ops{"B::UNOP"} = sub {
+    my ($scope, $op) = @_;
+    return {
+        op => $op->name,
+        expr => expr($scope, $op->first),
+    };
+};
+
+$ops{"B::BINOP"} = sub {
+    my ($scope, $op) = @_;
+    return {
+        op => $op->name,
+        args => [ map expr($scope, $_), $op->first, $op->last ],
+    };
+};
+
+$ops{"B::LISTOP"} = sub {
     my ($scope, $op) = @_;
 
     my @list;
@@ -52,61 +76,18 @@ $ops{lineseq} = sub {
     }
 
     return {
-        op => "lineseq",
+        op => $op->name,
         list => \@list,
     };
 };
 
-$ops{nextstate} = sub {
-    return {
-        op => "nextstate",
-    };
-};
 
-$ops{sassign} = sub {
-    my ($scope, $op) = @_;
-
-    return {
-        op => "assign",
-        value => expr($scope, $op->first),
-        target => expr($scope, $op->last),
-    };
-};
-
-# BINOP
-$ops{lt} = 
-$ops{add} = sub {
-    my ($scope, $op) = @_;
-    return {
-        op => $op->name,
-        args => [ map expr($scope, $_), $op->first, $op->last ],
-    };
-};
-
+$ops{const} =
 $ops{padsv} = sub {
     my ($scope, $op) = @_;
     return {
-        op => "padsv",
-        pad => $scope->{vars}->[$op->targ],
-    };
-};
-
-$ops{const} = sub {
-    my ($scope, $op) = @_;
-    return {
-        op => "const",
-        pad => $scope->{vars}->[$op->targ],
-    };
-};
-
-# UNOP
-$ops{leavesub} =
-$ops{negate} = 
-$ops{null} = sub {
-    my ($scope, $op) = @_;
-    return {
         op => $op->name,
-        expr => expr($scope, $op->first),
+        pad => $scope->{vars}->[$op->targ],
     };
 };
 

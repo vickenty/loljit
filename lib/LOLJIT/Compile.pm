@@ -50,11 +50,13 @@ $ops{lineseq} = sub {
 
 $ops{nextstate} = sub {};
 
-$ops{assign} = sub {
+$ops{sassign} = sub {
     my ($ctx, $op) = @_;
 
-    my $value = compile_expr $ctx, $op->{value};
-    my $target = compile_expr $ctx, $op->{target}, mode => "lvalue", type => jit_value_get_type $value;
+    my ($value_op, $target_op) = @{$op->{args}};
+
+    my $value = compile_expr $ctx, $value_op;
+    my $target = compile_expr $ctx, $target_op, mode => "lvalue", type => jit_value_get_type $value;
 
     jit_insn_store $ctx->{fun}, $target, $value;
 };
