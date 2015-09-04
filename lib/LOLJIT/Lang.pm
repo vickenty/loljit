@@ -74,7 +74,7 @@ sub push_any {
     elsif (type_eq $type, jit_type_nuint, jit_type_ulong) {
         lolxsub_stack_xpush_nuint @_;
     }
-    elsif (type_eq $type, jit_type_sys_double) {
+    elsif (type_eq $type, jit_type_float64) {
         lolxsub_stack_xpush_double @_;
     }
     else {
