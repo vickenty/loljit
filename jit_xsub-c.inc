@@ -56,11 +56,15 @@ void lolxsub_stack_putback(pTHX_ lolxsub_stack_state_t stack)
 
 IV lolxsub_sv_iv(pTHX_ SV *sv)
 {
+  if (!SvIOKp(sv))
+    croak("argument is not an integer");
   return SvIV(sv);
 }
 
 UV lolxsub_sv_uv(pTHX_ SV *sv)
 {
+  if (!SvIOK(sv))
+    croak("argument is not an integer");
   return SvUV(sv);
 }
 
