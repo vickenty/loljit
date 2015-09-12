@@ -7,6 +7,7 @@ use LOLJIT ":all";
 use LOLJIT::XSUB ":all";
 use Benchmark qw/timethese/;
 use DynaLoader;
+use FFI::Raw;
 
 my $ctx = jit_context_create;
 
@@ -95,6 +96,13 @@ sub gcd_lol {
     loljit_function_apply $fun, @_;
 }
 
+my $ffi = FFI::Raw->new_from_ptr(
+    jit_function_to_closure($fun),
+    FFI::Raw::long, 
+    FFI::Raw::long, FFI::Raw::long
+);
+*gcd_ffi = $ffi->coderef;
+
 sub gcd_perl {
     my ($u, $v) = @_;
     my $t;
@@ -112,12 +120,14 @@ my $v = shift // int rand(1_000_000_000) + 1_000_000_000;
 
 print "gcd_lol($u, $v) = ", gcd_lol($u, $v), "\n";
 print "gcd_jit($u, $v) = ", gcd_jit($u, $v), "\n";
+print "gcd_ffi($u, $v) = ", gcd_ffi($u, $v), "\n";
 print "gcd_perl($u, $v) = ", gcd_perl($u, $v), "\n";
 print "gcd_xsub($u, $v) = ", gcd_xsub($u, $v), "\n";
 
 timethese(2000000, {
     perl => sub { gcd_perl($u, $v) },
     jit => sub { gcd_jit($u, $v) },
+    ffi => sub { gcd_ffi($u, $v) },
     lol => sub { gcd_lol($u, $v) },
     lxs => sub { gcd_xsub($u, $v) },
 });
